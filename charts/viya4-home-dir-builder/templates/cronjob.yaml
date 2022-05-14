@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "selerity-home-dir-builder.fullname" . }}
+spec:
+  schedule: {{ .Values.schedule }}
+  suspend: {{ .Values.suspend }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            created-by: {{ include "selerity-home-dir-builder.fullname" . }}
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          volumes:
+            - name: userhome
+              nfs:
+                server: {{ .Values.nfs.server }}
+                path: {{ .Values.nfs.mount }}
+            - name: scripts
+              configMap:
+                name: {{ include "selerity-home-dir-builder.fullname" . }}-py
+          containers:
+            - name: home-dir-builder
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["python",  "/scripts/home_dir_builder.py"]
+              envFrom:
+                - secretRef: 
+                    name: sas-consul-client
+                - secretRef:
+                    name: {{ include "selerity-home-dir-builder.fullname" . }}
+                - configMapRef:
+                    name: {{ include "selerity-home-dir-builder.fullname" . }}
+              volumeMounts:
+                - name: userhome
+                  mountPath: {{ .Values.viya.home_dir_location }}
+                - name: scripts
+                  mountPath: /scripts
+          restartPolicy: Never
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+      backoffLimit: 4
