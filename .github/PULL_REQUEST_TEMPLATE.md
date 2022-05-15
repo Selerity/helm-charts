@@ -35,4 +35,4 @@ We would like these checks to pass before we even continue reviewing your change
 <!-- [Place an '[x]' (no spaces) in all applicable fields. Please remove unrelated fields.] -->
 - [ ] [DCO](https://github.com/Selerity/helm-charts/blob/main/CONTRIBUTING.md#sign-off-your-work) signed
 - [ ] Chart Version bumped
-- [ ] Title of the PR starts with chart name (e.g. `[prometheus-couchdb-exporter]`)
+- [ ] Title of the PR starts with chart name (e.g. `[viya4-home-dir-builder]`)
