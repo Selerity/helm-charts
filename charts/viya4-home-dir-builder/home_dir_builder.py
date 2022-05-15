@@ -1,3 +1,9 @@
+"""
+(c) Selerity Pty. Ltd. 2022.  All Rights Reserved.
+This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivitives License. To view a copy 
+of the license, visit https://creativecommons.org/licenses/by-nc-nd/4.0/
+"""
+
 import os
 import sys
 import subprocess
