@@ -8,6 +8,7 @@ import os
 import sys
 import requests
 import logging
+from time import sleep
 
 viya_base_url = os.environ.get('VIYA_BASE_URL')
 client_id = os.environ.get('CLIENT_ID')
@@ -53,7 +54,8 @@ def register_oauth_client(consul_token, viya_base_url, client_id, client_secret)
     payload = {"client_id": client_id, "client_secret": client_secret, "authorized_grant_types": "client_credentials", "scope": "openid *", "authorities": "SASAdministrators"}
     headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {access_token}'}
     response = requests.request("POST", url, headers=headers, json=payload)
-    if response.status_code == 200:
+    log.debug(response)
+    if response.status_code == 201:
         return(True)
     else:
         return(False)
@@ -76,12 +78,20 @@ def get_token(consul_token, viya_base_url, client_id, client_secret, retry=0):
     payload = {'grant_type': 'client_credentials'}
     headers = {'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'}
     response = requests.request("POST", url, headers=headers, data=payload, auth=(client_id, client_secret))
-    if response.status_code != 200:
-        if retry == 0:
-            log.info("The OAuth Client has become corrupted. Recreating it...")
-            delete_oauth_client(consul_token, viya_base_url, client_id)
-            register_oauth_client(consul_token, viya_base_url, client_id, client_secret)
-            access_token = get_token(consul_token, viya_base_url, client_id, client_secret, retry=1)
+    i = 0
+    while response.status_code != 200:
+        i += 1
+        log.info("The OAuth Client has become corrupted. Recreating it...")
+        if (delete_oauth_client(consul_token, viya_base_url, client_id)).status_code in [200,404]:
+            log.info("Oauth Client deleted.")
+            if register_oauth_client(consul_token, viya_base_url, client_id, client_secret):
+                log.info("OAuth Client registered.")
+                sleep(5)
+                response = requests.request("POST", url, headers=headers, data=payload, auth=(client_id, client_secret))
+                log.debug(response)
+        if i > 5:
+            log.error("Unable to obtain OAuth Client token.")
+            break
     access_token = response.json()['access_token']
     return(access_token)
 
