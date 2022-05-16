@@ -6,8 +6,6 @@ of the license, visit https://creativecommons.org/licenses/by-nc-nd/4.0/
 
 import os
 import sys
-import subprocess
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests'])
 import requests
 import logging
 
