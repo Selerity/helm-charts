@@ -16,7 +16,8 @@ schedule: 0,15,30,45 * * * *
 # If suspend is set to true, then you must manually trigger the job
 # If suspend is set to false, then the job will run on the schedule above
 suspend: true
-debug: 1
+debug: 0
+dry_run: 1
 
 viya:
   # The base URL of SAS Viya. e.g. https://viya.company.com

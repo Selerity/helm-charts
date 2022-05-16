@@ -8,3 +8,4 @@ data:
   HOME_DIR_PATH: "{{ .Values.viya.home_dir_location }}"
   USER_EXCEPTIONS: "{{ .Values.viya.user_exceptions }}"
   DEBUG: "{{ .Values.debug }}"
+  DRY_RUN: "{{ .Values.dry_run }}"
