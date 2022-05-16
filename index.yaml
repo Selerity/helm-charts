@@ -14,6 +14,21 @@ entries:
   viya4-home-dir-builder:
   - apiVersion: v2
     appVersion: "3"
+    created: "2022-05-16T03:16:54.848311411Z"
+    description: Create home directories for SAS Viya 4 Users
+    digest: ac8d424e4b3d92a299c8c2dba5d7b0495fbd17c49e3d0e09c6534f9595bf569e
+    home: https://seleritysas.com
+    icon: https://seleritysas.com/wp-content/uploads/2017/08/cropped-logo_square-1.png
+    maintainers:
+    - email: michael.dixon@selerity.com.au
+      name: seleritymichael
+    name: viya4-home-dir-builder
+    type: application
+    urls:
+    - https://github.com/Selerity/helm-charts/releases/download/viya4-home-dir-builder-0.2.0/viya4-home-dir-builder-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: "3"
     created: "2022-05-15T04:54:43.784021152Z"
     description: Create home directories for SAS Viya 4 Users
     digest: 30be7b0ea1fd52e3eb0d011134abbf42b1a25b70ae3cf8cdf9a1cf51bb1fa559
@@ -37,4 +52,4 @@ entries:
     urls:
     - https://github.com/Selerity/helm-charts/releases/download/viya4-home-dir-builder-0.1.2/viya4-home-dir-builder-0.1.2.tgz
     version: 0.1.2
-generated: "2022-05-15T04:54:43.784041552Z"
+generated: "2022-05-16T03:16:54.848335715Z"
