@@ -19,6 +19,8 @@ At a minimum you must provide values for `viya.base_url` and `nfs.server`.  All 
 helm show values selerity/viya4-home-dir-builder
 ```
 
+The default settings will create a kubernetes Cron Job that must be triggered manually (i.e. suspended), and when triggered will only report on what it will do (i.e. it will perform a `dry run`).  To allow the process to create/update home directories add the `--set dry_run=0` option to the command line.
+
 ## Install Chart
 
 ```
