@@ -15,4 +15,4 @@ Once Helm has been set up correctly, add the repo as follows:
 helm repo add selerity https://selerity.github.io/helm-charts
 ```
 
-You can then run `helm repo search selerity` to see the charts.
+You can then run `helm search repo selerity` to see the charts.
