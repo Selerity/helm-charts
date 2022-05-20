@@ -1,0 +1,14 @@
+apiVersion: v2
+name: sas-analytics-pro
+description: A Helm chart to deploy SAS Analytics Pro
+home: https://seleritysas.com
+icon: https://seleritysas.com/wp-content/uploads/2017/08/cropped-logo_square-1.png
+maintainers:
+  - name: seleritymichael
+    email: michael.dixon@selerity.com.au
+
+type: application
+
+version: 0.1.0
+
+appVersion: "0.14.24-20220517.1652803599414"

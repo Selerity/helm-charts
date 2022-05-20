@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sas-analytics-pro.fullname" . }}-config
+  labels:
+    {{- include "sas-analytics-pro.labels" . | nindent 4 }}
+data:
+  RUN_MODE: {{ default "developer" .Values.sas.runMode | quote }}
+  SAS_DEBUG: {{ default "0" .Values.sas.debug | quote }}
+  SAS_DEMO_USER: {{ default "sasdemo" .Values.sas.user | quote }}
+  SAS_RUN_HTTPD: {{ default "true" (include "sas-analytics-pro.runHttpd" .) }}
+  STUDIO_HTTP_PORT: {{ default "8080" .Values.sas.studioHttpPort | quote }}
+  STUDIO_HTTPS_PORT: {{ default "8443" .Values.sas.studioHttpsPort | quote }}
+  SASLOCKDOWN: {{ template "sas-analytics-pro.lockdown" . }}
+  SAS_LOGS_TO_DISK: {{ default "false" .Values.sas.logToDisk | quote }}
+  SASLOGROOT: {{ default "/logs" .Values.sas.logRoot | quote }}
+{{- if .Values.sas.sslCert }}
+  SSL_CERT_NAME: "custom_tls.crt"
+{{- end }}
+{{- if .Values.sas.sslKey }}
+  SSL_KEY_NAME: "custom_tls.key"
+{{- end }}
+  SETINIT_TEXT: |
+    {{ required "A valid SAS License is required!" .Values.sas.license }}
+  HOST_AUTH: |
+    {{ .Values.sas.hostAuth | nindent 4 }}
+  PRE_DEPLOY_SCRIPT: |
+    {{ .Values.sas.preDeployScript | nindent 4 }}
+  POST_DEPLOY_SCRIPT: |
+    {{ .Values.sas.postDeployScript | nindent 4 }}

@@ -1,0 +1,187 @@
+# Default values for sas-analytics-pro.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# TODO: The image pull timeout (runtime-request-timeout) is 2m with using KIND. This means it will always timeout trying to pull the apro image from SAS when using KIND.
+
+sas:
+  # sas.order The SAS Order - REQUIRED
+  order: ""
+  # sas.registryPass The password required to access the Order
+  registryPass: ""
+  # sas.license The SAS License JWT file should be passed to helm using "--set-file sas.license=" - REQUIRED
+  license: ""
+  # sas.user The username to use to log into SAS Studio. Will default to "sasdemo" if left blank
+  user: ""
+  # sas.password The password to use. If left blank a password will be generated if creating a new deployment
+  password: ""
+
+  # sas.ordersApiKey The SAS Viya Orders API Key
+  ordersApiKey: ""
+  # sas.ordersApiSecret The SAS Viya Order API Secret
+  ordersApiSecret: ""
+  # sas.ordersCertFile The Certificate file from my.sas.com. Use "--set-file sas.orderCertFile="
+  orderCertFile: ""
+
+  # sas.cadenceName The Cadence Name "stable" or "lts"
+  cadenceName: ""
+  # sas.cadenceVersion The Cadence Version. e.g. "2022.1.1"
+  cadenceVersion: ""
+
+  # sas.lockdown Enable or disable LOCKDOWN mode
+  lockdown: false
+  # sas.spawnerUsermods Your Spawner Usermod file should be passed to helm using "--set-file sas.spawnerUsermods=" - optional
+  spawnerUsermods: ""
+  # sas.initUsermods Your SAS Studio Usermod file should be passed to helm using "--set-file sas.initUsermods=" - optional
+  initUsermods: ""
+  # sas.autoexecUsermods Your Autoexec Usermod file should be passed to helm using "--set-file sas.autoexecUsermods=" - optional
+  autoexecUsermods: ""
+  # sas.v9usermods Your sasv9.cfg Usermod file should be passed to helm using "--set-file sas.v9usermods=" - optional
+  v9usermods: ""
+  # sas.serverUsermods Your Workspace Usermod file should be passed to helm using "--set-file sas.serverUsermods=" - optional
+  serverUsermods: ""
+  # sas.batchServerUsermods Your Batch Server Usermod file should be passed to helm using "--set-file sas.batchServerUsermods=" - optional
+  batchServerUsermods: ""
+  # sas.preDeployScript If you would like to run a shell script prior to SAS Starting up, that shell script should be passed to helm using "--set-file sas.preDeployScript="
+  preDeployScript: ""
+  # sas.postDeployScript If you would like to run a shell script after SAS terminates, that shell script should be passed to helm using "--set-file sasPostDeployScript="
+  postDeployScript: ""
+  # sas.autoMaster If you have sssd enabled and want to automount your home directories, pass you auto.master file to helm using "--set-file sas.autoMaster="
+  autoMaster: ""
+  # sas.autoHome If you have sssd enabled and want to automount your home directories, pass you auto.home file to helm using "--set-file sas.autoHome="
+  autoHome: ""
+  # sas.debug
+  debug: 0
+  # sas.hostAuth Script to run to configure host authentication if required
+  hostAuth: ""
+  # sas.runMode
+  runMode: "developer"
+  # sas.runHttpd 
+  runHttpd: true
+  # sas.studioHttpPort - defaults to 8080 if left blank
+  studioHttpPort: ""
+  # sas.studioHttpsPort - defaults to 8443 if left blank
+  studioHttpsPort: ""
+  # sas.logToDisk
+  logToDisk: "false"
+  # sas.logRoot
+  logRoot: "/logs"
+  # sas.sslCert Contents of TLS Certificate in PEM format
+  sslCert: ""
+  # sas.sslKey Contents of TLS Private Key in PEM format
+  sslKey: ""
+
+volumes: {}
+  # - name: my-data
+  #   hostPath:
+  #     path: /path/to/my/data
+  #     type: Directory
+
+volumeMounts: {}
+  # - name: my-data
+  #   mountPath: /data/my-darta
+
+
+sssd: 
+  enabled: false
+  # domain: "my.domain.com"
+  # ldapUri: "ldap://ldap-server:389"
+  # ldapSearchBase: "cn=Users,dc=my,dc=domain,dc=com"
+  # ldapDefaultBindDn: "cn=ldap-user,cn=Users,dc=my,dc=domain,dc=com"
+  # ldapPassword: ""
+  # ldapAccessFilter: "memberOf=cn=SAS-Server-Users,ou=SAS Groups,ou=Groups,dc=my,dc=domain,dc=com"
+  # cert: ""
+  # confOverride: ""
+
+nfs:
+  enabled: false
+  # server: "nfs.my.domain.com"
+  # port: 2049
+  # homePath: "/home"
+  # autoHomeOverride: ""
+  # autoMasterOverride: ""
+
+replicaCount: 1
+
+image:
+  repository: cr.sas.com/viya-4-x64_oci_linux_2-docker/sas-analytics-pro
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsUser: 0
+  runAsGroup: 0
+  fsGroup: 0
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: LoadBalancer
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: 
+  limits:
+    memory: 1024Mi
+  requests:
+    memory: 512Mi
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

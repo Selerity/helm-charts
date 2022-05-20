@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sas-analytics-pro.fullname" . }}-sasinside
+  labels:
+    {{- include "sas-analytics-pro.labels" . | nindent 4 }}
+data:
+  spawner_usermods.sh: |
+    {{ default "" .Values.sas.spawnerUsermods | nindent 4 }}
+  init_usermods.properties: |
+    {{ default "" .Values.sas.initUsermods | nindent 4 }}
+  batchserver_usermods.sh: |
+      {{ .Values.sas.batchServerUsermods | nindent 4 }}
+  autoexec_usermods.sas: |
+    {{ default "" .Values.sas.autoexecUsermods | nindent 4 }}
+  sasv9_usermods.cfg: |
+    {{ default "" .Values.sas.v9usermods | nindent 4 }}
+  workspaceserver_usermods.sh: |
+      {{ default "" .Values.sas.serverUsermods | b64enc }}
