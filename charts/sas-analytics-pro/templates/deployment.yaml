@@ -136,7 +136,12 @@ spec:
             {{- if .Values.securityContext }}
             {{- toYaml .Values.securityContext | nindent 12 }}
             {{- end }}
+        {{- if eq .Values.sas.license "TEST" }}
+          image: busybox:1.28
+          command: ["sh", "-c", "echo TEST"]
+        {{- else }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - mountPath: /etc/profile.d/sas-env.sh
@@ -168,6 +173,7 @@ spec:
             - name: sasstudio
               containerPort: 7080
               protocol: TCP
+        {{- if ne .Values.sas.license "TEST" }}
           livenessProbe:
             httpGet:
               port: sasstudio
@@ -181,6 +187,7 @@ spec:
               path: /SASStudio/signin
             initialDelaySeconds: 60
             periodSeconds: 30
+        {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

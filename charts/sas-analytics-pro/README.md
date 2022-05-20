@@ -11,7 +11,7 @@ helm repo update
 
 ## Configure your settings
 
-At a minimum you must provide values for `sas.order` and `sas.registryPass`.  All configurable options can be examined by using the following command:
+At a minimum you must provide values for `sas.order`, `sas.registryPass` and `sas.license`.  All configurable options can be examined by using the following command:
 
 ```
 helm show values selerity/sas-analytics-pro
@@ -22,13 +22,13 @@ The `sas.registryPass` value can be found by using the `mirrormgr list remote do
 ## Install Chart
 
 ```
-helm install -n[VIYA_NAMESPACE] [RELEASE_NAME] selerity/sas-analytics-pro --set sas.order=[ORDER] --set sas.registryPass=[REGISTRY_PASSWORD]]
+helm install -n[VIYA_NAMESPACE] [RELEASE_NAME] selerity/sas-analytics-pro --set sas.order=[ORDER] --set sas.registryPass=[REGISTRY_PASSWORD] --set-file sas.license=[PATH_TO_LICENSE_FILE]
 ```
 
 Example:
 
 ```
-helm install -nviya xena selerity/sas-analytics-pro --set sas.order=ABC123 --set sas.registryPass="asdf@#%asd"
+helm install -nviya xena selerity/sas-analytics-pro --set sas.order=ABC123 --set sas.registryPass="asdf@#%asd" --set-file sas.license=license.jwt
 ```
 
 ## Uninstall Chart
@@ -40,7 +40,7 @@ helm uninstall -n[VIYA_NAMESPACE] [RELEASE_NAME]
 ## Upgrading Chart
 
 ```
-helm upgrade -n[VIYA_NAMESPACE] [RELEASE_NAME] selerity/sas-analytics-pro --install --set sas.order=[ORDER] --set sas.registryPass=[REGISTRY_PASSWORD]
+helm upgrade -n[VIYA_NAMESPACE] [RELEASE_NAME] selerity/sas-analytics-pro --install --set sas.order=[ORDER] --set sas.registryPass=[REGISTRY_PASSWORD] --set-file sas.license=[PATH_TO_LICENSE_FILE]
 ```
 
 # NOTE

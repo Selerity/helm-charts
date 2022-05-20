@@ -56,7 +56,7 @@ sas:
   hostAuth: ""
   # sas.runMode
   runMode: "developer"
-  # sas.runHttpd 
+  # sas.runHttpd
   runHttpd: true
   # sas.studioHttpPort - defaults to 8080 if left blank
   studioHttpPort: ""
@@ -82,7 +82,7 @@ volumeMounts: {}
   #   mountPath: /data/my-darta
 
 
-sssd: 
+sssd:
   enabled: false
   # domain: "my.domain.com"
   # ldapUri: "ldap://ldap-server:389"
@@ -157,7 +157,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: 
+resources:
   limits:
     memory: 1024Mi
   requests:
