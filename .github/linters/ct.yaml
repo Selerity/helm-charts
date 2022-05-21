@@ -5,4 +5,4 @@ chart-dirs:
   - charts
 chart-repos:
   - selerity=https://selerity.github.io/helm-charts
-helm-extra-args: --timeout 30m
+helm-extra-args: --timeout 600s

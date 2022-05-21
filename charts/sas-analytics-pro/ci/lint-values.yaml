@@ -2,3 +2,12 @@ sas:
   order: "TEST"
   registryPass: "TEST"
   license: "TEST"
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+probe:
+  port: http
+  path: /index.html

@@ -141,6 +141,10 @@ service:
   type: LoadBalancer
   port: 8080
 
+probe:
+  port: sasstudio
+  path: /SASStudio/signin
+
 ingress:
   enabled: false
   className: ""
