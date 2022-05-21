@@ -137,8 +137,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
             {{- end }}
         {{- if eq .Values.sas.license "TEST" }}
-          image: busybox:1.28
-          command: ["sh", "-c", "echo TEST"]
+          image: nginx
         {{- else }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         {{- end }}
