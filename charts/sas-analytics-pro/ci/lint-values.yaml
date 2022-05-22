@@ -11,3 +11,7 @@ image:
 probe:
   port: http
   path: /index.html
+
+service:
+  port: 8080
+  type: ClusterIP

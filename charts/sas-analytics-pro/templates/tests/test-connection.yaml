@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "sas-analytics-pro.fullname" . }}:80']
+      args: ['{{ include "sas-analytics-pro.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never
