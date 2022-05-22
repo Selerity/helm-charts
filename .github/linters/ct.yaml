@@ -4,6 +4,5 @@ target-branch: main
 chart-dirs:
   - charts
 chart-repos:
-  - bitnami=https://charts.bitnami.com/bitnami
   - selerity=https://selerity.github.io/helm-charts
-helm-extra-args: --timeout 600s
+# helm-extra-args: --timeout 600s

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "sas-analytics-pro.fullname" . }}
+  labels:
+    {{- include "sas-analytics-pro.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  {{- if .Values.sas.runHttpd }}
+    - port: {{ default "8080" .Values.sas.studioHttpPort }}
+      targetPort: 80
+      protocol: TCP
+      name: http
+    - port: {{ default "8443" .Values.sas.studioHttpsPort }}
+      targetPort: 443
+      protocol: TCP
+      name: https
+  {{- end }}
+    - port: 7080
+      targetPort: 7080
+      protocol: TCP
+      name: sasstudio
+  sessionAffinity: None
+  selector:
+    {{- include "sas-analytics-pro.selectorLabels" . | nindent 4 }}

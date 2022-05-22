@@ -1,0 +1,198 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sas-analytics-pro.fullname" . }}
+  labels:
+    {{- include "sas-analytics-pro.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "sas-analytics-pro.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include "sas-analytics-pro.sasUserPassword" . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "sas-analytics-pro.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ include "sas-analytics-pro.fullname" . }}-pull-secret
+      serviceAccountName: {{ include "sas-analytics-pro.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      - name: sas-env
+        emptyDir: {}
+      - name: init-files
+        configMap:
+          name: {{ template "sas-analytics-pro.fullname" . }}-init-files
+          defaultMode: 0755
+      - name: sas-analytics-pro-logs
+        emptyDir: {}
+      - name: sas-analytics-pro-sasinside
+        configMap:
+          name: {{ template "sas-analytics-pro.fullname" . }}-sasinside
+          defaultMode: 0755
+      - name: sas-analytics-pro-osconfig
+        configMap:
+          name: {{ template "sas-analytics-pro.fullname" . }}-osconfig
+          defaultMode: 0755
+      - name: sas-analytics-pro-authinfo
+        secret:
+          secretName: {{ template "sas-analytics-pro.fullname" . }}-authconfig
+          defaultMode: 0755
+    {{- if .Values.sas.orderCertFile }}
+      - name: sas-order-cert-file
+        secret:
+          secretName: {{ template "sas-analytics-pro.fullname" . }}-order
+          defaultMode: 0644
+    {{- end }}
+      - name: sas-analytics-pro-sasinsiderw
+        emptyDir: {}
+      - name: sas-analytics-pro-osconfigrw
+        emptyDir: {}
+      - name: sas-analytics-pro-data
+        emptyDir: {}
+    {{- with .Values.volumes }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+      initContainers:
+      - name: {{ .Chart.Name }}-init
+        image: selerity/sas-tools:latest
+        command: ['sh', '-c', '/init/boot.sh']
+        env:
+          - name: CHARTVERSION
+            value: "{{ .Chart.Version }}"
+        {{- if .Values.sas.order }}
+          - name: ORDER
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                key: order
+        {{- end }}
+        {{- if .Values.sas.ordersApiKey }}
+          - name: CLIENTCREDENTIALSID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                key: ordersApiKey
+        {{- end }}
+        {{- if .Values.sas.ordersApiSecret }}
+          - name: CLIENTCREDENTIALSSECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                key: ordersApiSecret
+        {{- end }}
+        {{- if .Values.sas.cadenceName }}
+          - name: CADENCENAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                key: cadenceName
+        {{- end }}
+        {{- if .Values.sas.cadenceVersion }}
+          - name: CADENCEVERSION
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                key: cadenceVersion
+        {{- end }}
+        volumeMounts:
+          - mountPath: /sasinside
+            name: sas-analytics-pro-osconfig
+          - mountPath: /sasinsiderw
+            name: sas-analytics-pro-osconfigrw
+          - mountPath: /osconfig
+            name: sas-analytics-pro-osconfig
+          - mountPath: /osconfigrw
+            name: sas-analytics-pro-osconfigrw
+          - mountPath: /authinfo.txt
+            name: sas-analytics-pro-authinfo
+            subPath: authinfo.txt
+          - mountPath: /data
+            name: sas-analytics-pro-data
+          - mountPath: /sas-env
+            name: sas-env
+          - mountPath: /init
+            name: init-files
+        {{- if .Values.sas.orderCertFile }}
+          - mountPath: /certs.zip
+            name: sas-order-cert-file
+            subPath: certs.zip
+        {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{ if .Values.nfs.enabled  -}}
+            privileged: true
+            {{- end }}
+            {{- if .Values.securityContext }}
+            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - mountPath: /etc/profile.d/sas-env.sh
+              name: sas-env
+              subPath: sas-env.sh
+            - mountPath: /logs
+              name: sas-analytics-pro-logs
+            - mountPath: /sasinside
+              name: sas-analytics-pro-sasinsiderw
+            - mountPath: /sasinside/sasosconfig
+              name: sas-analytics-pro-osconfigrw
+            - mountPath: /data
+              name: sas-analytics-pro-data
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ template "sas-analytics-pro.fullname" . }}-config
+          ports:
+          {{- if .Values.sas.runHttpd }}
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+           {{- end }}
+            - name: sasstudio
+              containerPort: 7080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: {{ default "sasstudio" .Values.probe.port }}
+              path: {{ default "/SASStudio/signin" .Values.probe.path }}
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            failureThreshold: 12
+          readinessProbe:
+            httpGet:
+              port: {{ default "sasstudio" .Values.probe.port }}
+              path: {{ default "/SASStudio/signin" .Values.probe.path }}
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            failureThreshold: 24
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

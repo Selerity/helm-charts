@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sas-analytics-pro.fullname" . }}-osconfig
+  labels:
+    {{- include "sas-analytics-pro.labels" . | nindent 4 }}
+data:
+  release.txt: "{{ .Chart.Name }} - {{ .Chart.Version }} ({{ .Release.Name }} - {{ .Release.Revision }})"
+{{- if .Values.sssd.enabled }}
+  sssd.conf: |
+  {{- if .Values.sssd.confOverride }}
+    {{- .Values.sssd.confOverride | nindent 4 }}
+  {{- else }}
+    {{- include "sssd.conf" . | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- if .Values.sssd.sssdCert }}
+  sssd.cert: |
+    {{- .Values.sssd.sssdCert | nindent 4 }}
+{{- end }}
+{{- if .Values.nfs.enabled }}
+  auto.master: |
+  {{- if .Values.nfs.autoMasterOverride }}
+    {{- .Values.sas.autoMaster | nindent 4 }}
+  {{- else }}
+    {{- include "auto.master" . | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- if .Values.nfs.enabled }}
+  auto.home: |
+  {{- if .Values.nfs.autoHomeOverride }}
+    {{- .Values.sas.autoHome | nindent 4 }}
+  {{- else }}
+    {{- include "auto.home" . | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- if .Values.sas.sslCert }}
+  custom-tls.crt: |
+    {{- .Values.sas.sslCert | nindent 4 }}
+{{- end }}
+{{- if .Values.sas.sslKey }}
+  custom-tls.key: |
+    {{- .Values.sas.sslKey | nindent 4 }}
+{{- end }}
