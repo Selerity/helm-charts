@@ -1,5 +1,8 @@
 {{- $userPassword := (include "sas-analytics-pro.sasUserPassword" .) -}}
-{{ repeat 80 "#" }}
+===============================================================================
+Home Directory Builder for SAS Viya 4
+(c) Selerity Pty Ltd 2022
+===============================================================================
 Order: {{ .Values.sas.order }}
 
 User: {{ template "sas-analytics-pro.sasUser" . }}
