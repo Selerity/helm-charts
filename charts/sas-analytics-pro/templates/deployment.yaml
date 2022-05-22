@@ -172,15 +172,16 @@ spec:
             httpGet:
               port: {{ default "sasstudio" .Values.probe.port }}
               path: {{ default "/SASStudio/signin" .Values.probe.path }}
-            initialDelaySeconds: 2
-            periodSeconds: 15
-            failureThreshold: 10
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            failureThreshold: 12
           readinessProbe:
             httpGet:
               port: {{ default "sasstudio" .Values.probe.port }}
               path: {{ default "/SASStudio/signin" .Values.probe.path }}
             initialDelaySeconds: 2
-            periodSeconds: 30
+            periodSeconds: 5
+            failureThreshold: 24
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
