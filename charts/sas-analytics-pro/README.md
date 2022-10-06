@@ -1,6 +1,6 @@
 # SAS Analytics Pro on Viya
 
-This chart will deploy SAS Anlaytics Pro on Viya.  You can deploy this on a cloud Kubernetes service such as EKS (AWS) or AKS (Azure), or on the Kubernetes service deployed on Docker Desktop (KIND).
+This chart will deploy SAS Analytics Pro on Viya.  You can deploy this on a cloud Kubernetes service such as EKS (AWS) or AKS (Azure), or on the Kubernetes service deployed on Docker Desktop (KIND).
 
 ## Add the Repo
 
