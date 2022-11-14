@@ -105,7 +105,10 @@ def get_uids(viya_base_url, access_token):
     for user in users:
         url = f"{viya_base_url}/identities/users/{user['id']}/identifier"
         response = requests.request("GET", url, headers=headers)
-        uid[user['id']] = response.json()["uid"]
+        try:
+            uid[user['id']] = response.json()["uid"]
+        except:
+            log.error(f"Unable to get details for for {user['id']}")
     return(uid)
 
 def home_dir_builder(consul_token, viya_base_url, client_id, client_secret, home_dir_path, user_exceptions, dry_run):
@@ -142,7 +145,7 @@ def home_dir_builder(consul_token, viya_base_url, client_id, client_secret, home
                 if dry_run == '0':
                     try:
                         new_home_dir = Path(home, uid)
-                        new_home_dir.mkdir(mode=750)
+                        new_home_dir.mkdir(mode=0a750)
                         log.info(f"Created home directory for {uid}")
                         try:
                             os.chown(new_home_dir, uids[uid], 1001)
