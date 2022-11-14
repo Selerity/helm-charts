@@ -142,7 +142,7 @@ def home_dir_builder(consul_token, viya_base_url, client_id, client_secret, home
                 if dry_run == '0':
                     try:
                         new_home_dir = Path(home, uid)
-                        new_home_dir.mkdir(mode=750)
+                        new_home_dir.mkdir(mode=0a750)
                         log.info(f"Created home directory for {uid}")
                         try:
                             os.chown(new_home_dir, uids[uid], 1001)
