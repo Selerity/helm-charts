@@ -98,7 +98,7 @@ def get_token(consul_token, viya_base_url, client_id, client_secret, retry=0):
 def get_uids(viya_base_url, access_token):
     uid = {}
     # Get Users
-    url = f"{viya_base_url}/identities/users"
+    url = f"{viya_base_url}/identities/users?limit=10000"
     headers = {'Accept': 'application/json', 'Authorization': f'Bearer {access_token}', 'Accept': 'application/json'}
     response = requests.request("GET", url, headers=headers)
     users = response.json()["items"]
