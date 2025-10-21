@@ -106,9 +106,9 @@ spec:
         {{- end }}
         volumeMounts:
           - mountPath: /sasinside
-            name: sas-analytics-pro-osconfig
+            name: sas-analytics-pro-sasinside #sas-analytics-pro-osconfig 
           - mountPath: /sasinsiderw
-            name: sas-analytics-pro-osconfigrw
+            name: sas-analytics-pro-sasinsiderw #sas-analytics-pro-osconfigrw 
           - mountPath: /osconfig
             name: sas-analytics-pro-osconfig
           - mountPath: /osconfigrw
