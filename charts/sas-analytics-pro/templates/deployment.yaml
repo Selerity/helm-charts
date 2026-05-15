@@ -141,7 +141,14 @@ spec:
             {{- if .Values.securityContext }}
             {{- toYaml .Values.securityContext | nindent 12 }}
             {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          {{- $imageTag := .Values.image.tag }}
+          {{- if and (not $imageTag) .Values.sas.orderCertFile (not .Values.sas.registryPass) }}
+          {{- $cmData := (lookup "v1" "ConfigMap" .Release.Namespace (printf "%s-image-tag" (include "sas-analytics-pro.fullname" .))) }}
+          {{- if and $cmData $cmData.data }}
+          {{- $imageTag = index $cmData.data "imageTag" }}
+          {{- end }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ $imageTag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - mountPath: /etc/profile.d/sas-env.sh
