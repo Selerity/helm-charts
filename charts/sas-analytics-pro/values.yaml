@@ -109,6 +109,12 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+# Image used by the init container for pre-deployment setup
+initImage:
+  repository: alpine
+  tag: "3.21"
+  pullPolicy: IfNotPresent
+
 nameOverride: ""
 fullnameOverride: ""
 

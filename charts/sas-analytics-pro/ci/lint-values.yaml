@@ -8,6 +8,11 @@ image:
   pullPolicy: IfNotPresent
   tag: "latest"
 
+initImage:
+  repository: alpine
+  tag: "3.21"
+  pullPolicy: IfNotPresent
+
 probe:
   port: http
   path: /index.html
