@@ -66,7 +66,7 @@ Create the name of the service account to use
 {{- if .registryPass }}
 {{- printf "{\"auths\":{\"cr.sas.com\":{\"auth\":\"%s\"}}}" (printf "%s:%s" .order .registryPass | b64enc) | b64enc }}
 {{- else if .orderCertFile }}
-{{- printf "{\"auths\":{\"cr.sas.com\":{\"auth\":\"%s\"}}}" (printf "%s:%s" .order .orderCertFile | b64enc) | b64enc }}
+{{- printf "{\"auths\":{\"cr.sas.com\":{\"auth\":\"%s\"}}}" (printf "%s:%s" .order (.orderCertFile | b64enc) | b64enc) | b64enc }}
 {{- end }}
 {{- end }}
 {{- end }}
