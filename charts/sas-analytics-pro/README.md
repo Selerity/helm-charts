@@ -17,7 +17,7 @@ At a minimum you must provide values for `sas.order`, `sas.registryPass` and `sa
 helm show values selerity/sas-analytics-pro
 ```
 
-The `sas.registryPass` value can be found by using the `mirrormgr list remote docker login` command as described in [Step 2 — Access the Container Image](https://documentation.sas.com/doc/en/anprocdc/v_011/dplyviya0ctr/p0ot22u2rapcsfn1outngvut0f8m.htm#p0xt4ltecfl3gan1rvt589xgjpu6) of the official SAS Documentation.  Use the value shown as `randompasswordvalue` in the SAS documentation.
+The `sas.registryPass` value can be found in the SAS documentation for [Step 2 — Access the Container Image](https://documentation.sas.com/doc/en/anprocdc/v_011/dplyviya0ctr/p0ot22u2rapcsfn1outngvut0f8m.htm#p0xt4ltecfl3gan1rvt589xgjpu6). Use the value shown as `randompasswordvalue` in the SAS documentation.
 
 ## Install Chart
 
@@ -42,6 +42,12 @@ helm uninstall -n[VIYA_NAMESPACE] [RELEASE_NAME]
 ```
 helm upgrade -n[VIYA_NAMESPACE] [RELEASE_NAME] selerity/sas-analytics-pro --install --set sas.order=[ORDER] --set sas.registryPass=[REGISTRY_PASSWORD] --set-file sas.license=[PATH_TO_LICENSE_FILE]
 ```
+
+### Upgrading to 1.1.0
+
+- The init container no longer uses the `selerity/sas-tools` image. It now uses `alpine:3.21` and calls the SAS Orders API directly via `curl` instead of relying on `mirrormgr` and `viya4-orders-cli`.
+- New `initImage` value allows overriding the init container image.
+- If you were providing `sas.ordersApiKey` and `sas.ordersApiSecret`, the license download now uses the SAS API directly — no behaviour change required.
 
 ### Upgrading to 1.0.0
 
