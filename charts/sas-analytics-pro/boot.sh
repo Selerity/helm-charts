@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 SAS_API_BASE="https://api.apiproxy.sas.com/mysas"
 
@@ -31,9 +31,7 @@ if [ -f /certs.zip ]; then
     # Extract registry credentials from the entitlement certificate
     PEM_FILE=$(find /tmp/certs -name "entitlement_certificate.pem" -type f | head -1)
     if [ -n "$PEM_FILE" ]; then
-        # The order number is the CN in the certificate subject
         order=$(openssl x509 -in "$PEM_FILE" -noout -subject 2>/dev/null | sed -n 's/.*CN *= *//p')
-        # The registry password is the base64-encoded certificate + key
         secret=$(cat "$PEM_FILE" | base64 -w 0 2>/dev/null || cat "$PEM_FILE" | base64 2>/dev/null)
         if [ -n "$order" ] && [ -n "$secret" ]; then
             echo "ORDER=${order}" >> /sas-env/sas-env.sh
@@ -80,14 +78,12 @@ if [ -f /authinfo.txt ]; then
     echo "Copying authinfo file"
     cp -v /authinfo.txt /data/
 fi
-osfiles=(/osconfig/*)
-if [ ${#osfiles[@]} -gt 0 ]; then
+if [ "$(ls /osconfig/ 2>/dev/null)" ]; then
     echo "Copying osconfig files"
     cp -v /osconfig/* /osconfigrw/
     chmod -v 644 /osconfigrw/*
 fi
-infiles=(/sasinside/*)
-if [ ${#infiles[@]} -gt 0 ]; then
+if [ "$(ls /sasinside/ 2>/dev/null)" ]; then
     echo "Copying sasinside files"
     cp -v /sasinside/* /sasinsiderw/
     chmod -v 644 /sasinsiderw/*
