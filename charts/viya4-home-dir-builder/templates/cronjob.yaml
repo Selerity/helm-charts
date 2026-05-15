@@ -34,6 +34,8 @@ spec:
             - name: scripts
               configMap:
                 name: {{ include "viya4-home-dir-builder.fullname" . }}-py
+            - name: pip-packages
+              emptyDir: {}
           initContainers:
             - name: ensure-home-dir
               image: busybox:1.37
@@ -41,11 +43,20 @@ spec:
               volumeMounts:
                 - name: nfs-root
                   mountPath: /nfs
+            - name: install-deps
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              command: ['pip', 'install', '--quiet', '--target', '/pip-packages', 'requests']
+              volumeMounts:
+                - name: pip-packages
+                  mountPath: /pip-packages
           containers:
             - name: home-dir-builder
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               command: ["python", "/scripts/home_dir_builder.py"]
+              env:
+                - name: PYTHONPATH
+                  value: /pip-packages
               envFrom:
                 - secretRef:
                     name: {{ .Values.viya.consulSecretName | default "sas-consul-client" }}
@@ -58,6 +69,8 @@ spec:
                   mountPath: {{ .Values.viya.homeDirLocation }}
                 - name: scripts
                   mountPath: /scripts
+                - name: pip-packages
+                  mountPath: /pip-packages
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
           restartPolicy: Never

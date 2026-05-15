@@ -3,10 +3,10 @@
 # Declare variables to be passed into your templates.
 
 image:
-  repository: selerity/python-core
-  pullPolicy: Always
+  repository: python
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: 3.12-slim
 
 imagePullSecrets: []
 nameOverride: ""

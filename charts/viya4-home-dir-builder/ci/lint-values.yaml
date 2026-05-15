@@ -11,6 +11,6 @@ oauth:
   clientId: test.client
 
 image:
-  repository: selerity/python-core
-  pullPolicy: Always
-  tag: latest
+  repository: python
+  pullPolicy: IfNotPresent
+  tag: 3.12-slim
