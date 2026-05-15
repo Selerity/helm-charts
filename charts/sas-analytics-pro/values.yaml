@@ -71,15 +71,15 @@ sas:
   # sas.sslKey Contents of TLS Private Key in PEM format
   sslKey: ""
 
-volumes: {}
+volumes: []
   # - name: my-data
   #   hostPath:
   #     path: /path/to/my/data
   #     type: Directory
 
-volumeMounts: {}
+volumeMounts: []
   # - name: my-data
-  #   mountPath: /data/my-darta
+  #   mountPath: /data/my-data
 
 
 sssd:
@@ -111,6 +111,10 @@ image:
 
 nameOverride: ""
 fullnameOverride: ""
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: false
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -161,21 +165,21 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+# Resources for the init container
+initResources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Resources for the main container
 resources:
   limits:
     memory: 1024Mi
   requests:
     memory: 512Mi
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
 
 autoscaling:
   enabled: false

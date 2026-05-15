@@ -8,11 +8,11 @@ spec:
   type: {{ .Values.service.type }}
   ports:
   {{- if .Values.sas.runHttpd }}
-    - port: {{ default "8080" .Values.sas.studioHttpPort }}
+    - port: {{ default 8080 .Values.sas.studioHttpPort }}
       targetPort: 80
       protocol: TCP
       name: http
-    - port: {{ default "8443" .Values.sas.studioHttpsPort }}
+    - port: {{ default 8443 .Values.sas.studioHttpsPort }}
       targetPort: 443
       protocol: TCP
       name: https

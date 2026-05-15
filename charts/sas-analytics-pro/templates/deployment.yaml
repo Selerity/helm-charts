@@ -31,26 +31,26 @@ spec:
         emptyDir: {}
       - name: init-files
         configMap:
-          name: {{ template "sas-analytics-pro.fullname" . }}-init-files
+          name: {{ include "sas-analytics-pro.fullname" . }}-init-files
           defaultMode: 0755
       - name: sas-analytics-pro-logs
         emptyDir: {}
       - name: sas-analytics-pro-sasinside
         configMap:
-          name: {{ template "sas-analytics-pro.fullname" . }}-sasinside
+          name: {{ include "sas-analytics-pro.fullname" . }}-sasinside
           defaultMode: 0755
       - name: sas-analytics-pro-osconfig
         configMap:
-          name: {{ template "sas-analytics-pro.fullname" . }}-osconfig
+          name: {{ include "sas-analytics-pro.fullname" . }}-osconfig
           defaultMode: 0755
       - name: sas-analytics-pro-authinfo
         secret:
-          secretName: {{ template "sas-analytics-pro.fullname" . }}-authconfig
+          secretName: {{ include "sas-analytics-pro.fullname" . }}-authconfig
           defaultMode: 0755
     {{- if .Values.sas.orderCertFile }}
       - name: sas-order-cert-file
         secret:
-          secretName: {{ template "sas-analytics-pro.fullname" . }}-order
+          secretName: {{ include "sas-analytics-pro.fullname" . }}-order
           defaultMode: 0644
     {{- end }}
       - name: sas-analytics-pro-sasinsiderw
@@ -65,6 +65,7 @@ spec:
       initContainers:
       - name: {{ .Chart.Name }}-init
         image: selerity/sas-tools:latest
+        imagePullPolicy: Always
         command: ['sh', '-c', '/init/boot.sh']
         env:
           - name: CHARTVERSION
@@ -73,35 +74,35 @@ spec:
           - name: ORDER
             valueFrom:
               secretKeyRef:
-                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                name: {{ include "sas-analytics-pro.fullname" . }}-order
                 key: order
         {{- end }}
         {{- if .Values.sas.ordersApiKey }}
           - name: CLIENTCREDENTIALSID
             valueFrom:
               secretKeyRef:
-                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                name: {{ include "sas-analytics-pro.fullname" . }}-order
                 key: ordersApiKey
         {{- end }}
         {{- if .Values.sas.ordersApiSecret }}
           - name: CLIENTCREDENTIALSSECRET
             valueFrom:
               secretKeyRef:
-                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                name: {{ include "sas-analytics-pro.fullname" . }}-order
                 key: ordersApiSecret
         {{- end }}
         {{- if .Values.sas.cadenceName }}
           - name: CADENCENAME
             valueFrom:
               secretKeyRef:
-                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                name: {{ include "sas-analytics-pro.fullname" . }}-order
                 key: cadenceName
         {{- end }}
         {{- if .Values.sas.cadenceVersion }}
           - name: CADENCEVERSION
             valueFrom:
               secretKeyRef:
-                name: {{ template "sas-analytics-pro.fullname" . }}-order
+                name: {{ include "sas-analytics-pro.fullname" . }}-order
                 key: cadenceVersion
         {{- end }}
         volumeMounts:
@@ -127,6 +128,8 @@ spec:
             name: sas-order-cert-file
             subPath: certs.zip
         {{- end }}
+        resources:
+          {{- toYaml .Values.initResources | nindent 10 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -155,7 +158,7 @@ spec:
           {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ template "sas-analytics-pro.fullname" . }}-config
+                name: {{ include "sas-analytics-pro.fullname" . }}-config
           ports:
           {{- if .Values.sas.runHttpd }}
             - name: http
