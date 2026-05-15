@@ -21,7 +21,7 @@ spec:
       labels:
         {{- include "sas-analytics-pro.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.sas.registryPass }}
+      {{- if or .Values.sas.registryPass .Values.sas.orderCertFile }}
       imagePullSecrets:
         - name: {{ include "sas-analytics-pro.fullname" . }}-pull-secret
       {{- end }}

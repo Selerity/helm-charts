@@ -1,0 +1,12 @@
+{
+  "viya_base_url": "https://viya.company.com",
+  "client_id": "selerity.homedir_builder",
+  "client_secret": "your-client-secret-here",
+  "consul_token": "your-consul-token-here",
+  "home_dir_path": "/home",
+  "user_exceptions": ["Administrator"],
+  "debug": false,
+  "dry_run": true,
+  "home_dir_mode": 488,
+  "home_dir_gid": 1001
+}
