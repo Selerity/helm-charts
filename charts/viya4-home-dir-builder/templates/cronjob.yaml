@@ -30,7 +30,7 @@ spec:
                 name: {{ include "selerity-home-dir-builder.fullname" . }}-py
           initContainers:
             - name: ensure-home-dir
-              image: busybox:latest
+              image: busybox:1.37
               command: ['sh', '-c', 'mkdir -p /nfs{{ .Values.nfs.mount }}']
               volumeMounts:
                 - name: nfs-root
