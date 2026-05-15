@@ -1,14 +1,14 @@
 apiVersion: v2
 name: viya4-home-dir-builder
 description: Create home directories for SAS Viya 4 Users
-home: https://seleritysas.com
-icon: https://seleritysas.com/wp-content/uploads/2017/08/cropped-logo_square-1.png
+home: https://selerity.com.au
+icon: https://assets.selerity.com.au/brand/icons/icon_selerity_purple.png
 maintainers:
   - name: seleritymichael
     email: michael.dixon@selerity.com.au
 
 type: application
 
-version: 0.2.5
+version: 0.2.6
 
 appVersion: latest
