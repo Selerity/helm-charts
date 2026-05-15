@@ -43,6 +43,13 @@ helm uninstall -n[VIYA_NAMESPACE] [RELEASE_NAME]
 helm upgrade -n[VIYA_NAMESPACE] [RELEASE_NAME] selerity/sas-analytics-pro --install --set sas.order=[ORDER] --set sas.registryPass=[REGISTRY_PASSWORD] --set-file sas.license=[PATH_TO_LICENSE_FILE]
 ```
 
+### Upgrading to 1.0.0
+
+This release includes the following breaking changes:
+
+- `volumes` and `volumeMounts` values changed from object (`{}`) to array (`[]`) type. If you have custom volumes configured, update your values to use array syntax.
+- Added `rbac.create` toggle. Existing deployments are unaffected as it defaults to `false`.
+
 # NOTE
 
 If you are using the Kubernetes service provided by Docker Desktop (KIND) you should manually pull the image before running the `helm` command. You can achieve this by following the steps in the official documentation for [Step 2 - Access the Container Image](https://documentation.sas.com/doc/en/anprocdc/v_011/dplyviya0ctr/p0ot22u2rapcsfn1outngvut0f8m.htm#p0xt4ltecfl3gan1rvt589xgjpu6) and stop once you have completed the `docker pull output-from-step-3` step.
