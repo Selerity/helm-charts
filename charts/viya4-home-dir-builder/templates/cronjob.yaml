@@ -17,6 +17,10 @@ spec:
             {{- toYaml . | nindent 8 }}
           {{- end }}
           volumes:
+            - name: nfs-root
+              nfs:
+                server: {{ .Values.nfs.server }}
+                path: /
             - name: userhome
               nfs:
                 server: {{ .Values.nfs.server }}
@@ -24,6 +28,13 @@ spec:
             - name: scripts
               configMap:
                 name: {{ include "selerity-home-dir-builder.fullname" . }}-py
+          initContainers:
+            - name: ensure-home-dir
+              image: busybox:1.37
+              command: ['sh', '-c', 'mkdir -p /nfs{{ .Values.nfs.mount }}']
+              volumeMounts:
+                - name: nfs-root
+                  mountPath: /nfs
           containers:
             - name: home-dir-builder
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
