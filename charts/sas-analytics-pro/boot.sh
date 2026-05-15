@@ -18,6 +18,7 @@ if [ "${CLIENTCREDENTIALSID}x" != "x" ] && [ "${CLIENTCREDENTIALSSECRET}x" != "x
         echo "License downloaded successfully."
     else
         echo "ERROR: Failed to download license from SAS Orders API."
+        exit 1
     fi
 fi
 
@@ -70,6 +71,7 @@ elif [ "${CLIENTCREDENTIALSID}x" != "x" ] && [ "${CLIENTCREDENTIALSSECRET}x" != 
         rm -rf /tmp/certs /tmp/certs.zip
     else
         echo "ERROR: Failed to download certificates from SAS Orders API."
+        exit 1
     fi
 fi
 
