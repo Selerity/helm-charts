@@ -48,7 +48,7 @@ spec:
               command: ["python", "/scripts/home_dir_builder.py"]
               envFrom:
                 - secretRef:
-                    name: sas-consul-client
+                    name: {{ .Values.viya.consulSecretName | default "sas-consul-client" }}
                 - secretRef:
                     name: {{ include "viya4-home-dir-builder.fullname" . }}
                 - configMapRef:

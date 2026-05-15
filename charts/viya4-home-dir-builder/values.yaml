@@ -29,6 +29,9 @@ viya:
   homeDirLocation: /home
   # A comma separated list of user ids you do not want home directories for
   userExceptions: Administrator
+  # Name of the existing Kubernetes secret containing the SAS Consul token
+  # This secret must exist in the target namespace (created by SAS Viya deployment)
+  consulSecretName: sas-consul-client
 
 nfs:
   # Host name of the NFS Server hosting the home directories

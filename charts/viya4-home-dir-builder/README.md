@@ -11,6 +11,12 @@ helm repo add selerity https://selerity.github.io/helm-charts
 helm repo update
 ```
 
+## Prerequisites
+
+This chart requires the following to exist in the target namespace:
+
+- A Kubernetes Secret named `sas-consul-client` (or as configured via `viya.consulSecretName`) containing the SAS Consul token. This is created automatically by the SAS Viya deployment.
+
 ## Configure your settings
 
 At a minimum you must provide values for `viya.baseUrl` and `nfs.server`. All configurable options can be examined by using the following command:
