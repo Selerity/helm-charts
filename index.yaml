@@ -3,6 +3,21 @@ entries:
   sas-analytics-pro:
   - apiVersion: v2
     appVersion: 0.18.30-20220920.1663692624971
+    created: "2026-05-15T10:07:25.616154943Z"
+    description: A Helm chart to deploy SAS Analytics Pro
+    digest: deb2f9e32203ca56e4063aac748f46181589bcb1ecb5dea19c9244ba82d7868b
+    home: https://selerity.com.au
+    icon: https://assets.selerity.com.au/brand/icons/icon_selerity_purple.png
+    maintainers:
+    - email: michael.dixon@selerity.com.au
+      name: seleritymichael
+    name: sas-analytics-pro
+    type: application
+    urls:
+    - https://github.com/Selerity/helm-charts/releases/download/sas-analytics-pro-1.3.1/sas-analytics-pro-1.3.1.tgz
+    version: 1.3.1
+  - apiVersion: v2
+    appVersion: 0.18.30-20220920.1663692624971
     created: "2026-05-15T09:56:54.74234028Z"
     description: A Helm chart to deploy SAS Analytics Pro
     digest: 0c2b0a8602909a03b456af9699cb80e1e23d23c027caf69820fdadbe42402b5e
@@ -327,4 +342,4 @@ entries:
     urls:
     - https://github.com/Selerity/helm-charts/releases/download/viya4-home-dir-builder-0.1.2/viya4-home-dir-builder-0.1.2.tgz
     version: 0.1.2
-generated: "2026-05-15T09:56:54.742403892Z"
+generated: "2026-05-15T10:07:25.616216128Z"
