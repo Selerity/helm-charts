@@ -1,0 +1,16 @@
+viya:
+  baseUrl: "https://viya.example.com"
+  homeDirLocation: /home
+  userExceptions: Administrator
+
+nfs:
+  server: "nfs.example.com"
+  mount: /home
+
+oauth:
+  clientId: test.client
+
+image:
+  repository: selerity/python-core
+  pullPolicy: Always
+  tag: latest

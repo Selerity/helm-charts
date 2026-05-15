@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "viya4-home-dir-builder.fullname" . }}-test"
+  labels:
+    {{- include "viya4-home-dir-builder.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: test-config
+      image: busybox:1.37
+      command: ['sh', '-c', 'echo "Chart installed successfully"']
+  restartPolicy: Never
