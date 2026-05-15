@@ -20,7 +20,7 @@ sas:
   ordersApiKey: ""
   # sas.ordersApiSecret The SAS Viya Order API Secret
   ordersApiSecret: ""
-  # sas.ordersCertFile The Certificate file from my.sas.com. Use "--set-file sas.orderCertFile="
+  # sas.orderCertFile The Certificate file from my.sas.com. Use "--set-file sas.orderCertFile="
   orderCertFile: ""
 
   # sas.cadenceName The Cadence Name "stable" or "lts"
