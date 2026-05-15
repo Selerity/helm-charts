@@ -1,7 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "selerity-home-dir-builder.fullname" . }}-py
+  name: {{ include "viya4-home-dir-builder.fullname" . }}-py
+  labels:
+    {{- include "viya4-home-dir-builder.labels" . | nindent 4 }}
 data:
   home_dir_builder.py: |-
 {{ .Files.Get "home_dir_builder.py" | indent 4 }}

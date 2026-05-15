@@ -1,10 +1,10 @@
-# Default values for selerity-home-dir-builder.
+# Default values for viya4-home-dir-builder.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 image:
   repository: selerity/python-core
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
 
@@ -12,20 +12,26 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-schedule: 0,15,30,45 * * * *
+# Cron schedule for the job
+schedule: "0,15,30,45 * * * *"
 # If suspend is set to true, then you must manually trigger the job
 # If suspend is set to false, then the job will run on the schedule above
 suspend: true
+# Enable debug logging (0 = off, 1 = on)
 debug: 0
-dry_run: 1
+# Dry run mode (1 = report only, 0 = create/update directories)
+dryRun: 1
 
 viya:
-  # The base URL of SAS Viya. e.g. https://viya.company.com
-  base_url: https://viya.company.com
+  # The base URL of SAS Viya (e.g. https://viya.company.com)
+  baseUrl: https://viya.company.com
   # The location within the container to mount the home directories to
-  home_dir_location: /home
+  homeDirLocation: /home
   # A comma separated list of user ids you do not want home directories for
-  user_exceptions: Administrator
+  userExceptions: Administrator
+  # Name of the existing Kubernetes secret containing the SAS Consul token
+  # This secret must exist in the target namespace (created by SAS Viya deployment)
+  consulSecretName: sas-consul-client
 
 nfs:
   # Host name of the NFS Server hosting the home directories
@@ -34,7 +40,30 @@ nfs:
   mount: /home
 
 oauth:
-  client_id: selerity.homedir_builder
+  # OAuth client ID for Viya API access
+  clientId: selerity.homedir_builder
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: false
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# Resources for the main container
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 nodeSelector: {}
 
