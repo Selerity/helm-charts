@@ -63,6 +63,6 @@ Create the name of the service account to use
 
 {{- define "imagePullSecret" }}
 {{- with .Values.sas }}
-{{- printf "{\"auths\":{\"cr.sas.com\":{\"auth\":\"%s\"}}}" (printf "%s:%s" (required "SAS Order required" .order) (required "Registry Password required" .registryPass) | b64enc) | b64enc }}
+{{- printf "{\"auths\":{\"cr.sas.com\":{\"auth\":\"%s\"}}}" (printf "%s:%s" .order .registryPass | b64enc) | b64enc }}
 {{- end }}
 {{- end }}
