@@ -1,0 +1,4 @@
+# Artifact Hub repository metadata file
+ignore:
+  - name: viya4-home-dir-builder
+    version: "1.0.0"
